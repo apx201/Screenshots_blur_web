@@ -107,6 +107,9 @@
     height:2px; background:#fff;}
 
   /* 底部按钮 */
+  .footlinks{text-align:center; padding:6px 0 8px;}
+  .footlinks a{margin:0 8px; text-decoration:none; transition:color .15s;}
+  .footlinks a:hover{color:#ffffff;}
   .actions{display:flex; gap:8px; padding:10px 14px calc(12px + env(safe-area-inset-bottom));
     border-top:2px solid var(--bg); background:var(--panel-dark);
     position:sticky; bottom:0; z-index:6;}
@@ -329,9 +332,11 @@
     <div class="loglist" id="loglist"></div>
   </div>
 
-  <div class="sect" style="text-align:center">
+  <div class="sect footlinks">
     <a href="https://github.com/apx201/Screenshots_blur_web" class="muted">GitHub仓库</a>
-  <a href="https://github.com/apx201/Screenshots_blur" class="muted">桌面版</a></div>
+    <a href="https://github.com/apx201/Screenshots_blur" class="muted">桌面版</a>
+    <a href="https://space.bilibili.com/1441611827" class="muted">作者哔哩哔哩</a>
+  </div>
 
   <div class="actions">
     <button class="btn primary" id="saveOne" disabled="">下载这张</button>
@@ -498,13 +503,13 @@ function setBusy(on, ratio = 0) {
 /* ---------------- 图片载入 ---------------- */
 async function loadImageFile(file) {
   const url = URL.createObjectURL(file);
-  // 优先用 createImageBitmap 并关闭色彩管理，保证导出 PNG 与原图像素完全一致；
-  // 不支持时退回 <img>（会按浏览器色彩管理转换，仍是 PNG 无损压缩）。
+  // 用浏览器色彩管理把图片统一转成 sRGB（和屏幕上看到的一致）；
+  // 若关闭色彩转换，Display P3 截图导出后会因为没有色彩配置而显得偏淡。
   if (typeof createImageBitmap === "function") {
     try {
       const bmp = await createImageBitmap(file, {
         imageOrientation: "from-image",
-        colorSpaceConversion: "none"
+        colorSpaceConversion: "default"
       });
       return { img: bmp, url, w: bmp.width, h: bmp.height };
     } catch (e) {
