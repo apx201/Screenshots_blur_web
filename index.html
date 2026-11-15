@@ -55,7 +55,7 @@
     border:2px solid var(--border); padding:3px 8px; font-size:11px; color:#e8eaf0;}
 
   /* 面板 */
-  .panel{flex:0 0 auto; background:var(--panel); max-height:58vh; overflow-y:auto;
+  .panel{flex:0 0 auto; background:var(--panel); max-height:60vh; overflow-y:auto;
     -webkit-overflow-scrolling:touch;}
   .thumbs{display:flex; gap:8px; padding:10px 12px 6px; overflow-x:auto;
     -webkit-overflow-scrolling:touch;}
@@ -73,7 +73,7 @@
   .row{display:flex; align-items:center; justify-content:space-between; padding:2px 14px 6px;}
   .label{font-size:14px; font-weight:700;}
   .muted{font-size:11px; color:var(--muted); font-weight:400;}
-  .zoomwrap{position:relative; margin:0 14px 8px; height:96px; background:var(--field);
+  .zoomwrap{position:relative; margin:0 14px 8px; height:84px; background:var(--field);
     border:2px solid var(--border); overflow:hidden;}
   .zoomwrap canvas{display:block; width:100%; height:100%;}
   .zoomlab{position:absolute; left:6px; bottom:4px; font-size:10px; color:#e8eaf0;
@@ -108,7 +108,8 @@
 
   /* 底部按钮 */
   .actions{display:flex; gap:8px; padding:10px 14px calc(12px + env(safe-area-inset-bottom));
-    border-top:2px solid var(--bg); background:var(--panel-dark);}
+    border-top:2px solid var(--bg); background:var(--panel-dark);
+    position:sticky; bottom:0; z-index:6;}
   .btn{flex:1 1 0; height:46px; border:2px solid var(--border); font-size:15px;
     font-weight:700; padding:0;}
   .btn.primary{background:var(--green); color:#fff;}
@@ -134,6 +135,32 @@
   .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
   .pc-hint{display:none;}
   .pc-only{display:none;}
+  .frow{display:flex; gap:10px; padding:0 14px 8px; align-items:center; flex-wrap:wrap;}
+  .f{display:flex; align-items:center; gap:8px; flex:1 1 140px; min-width:0;}
+  .f.small{flex:0 0 auto;}
+  .f > span{white-space:nowrap; flex:0 0 auto;}
+  #namePreview{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70%;}
+  .f input[type=text], .f input[type=number]{
+    flex:1 1 auto; min-width:0; height:34px; background:var(--field);
+    border:2px solid var(--border); color:var(--ink); font-size:16px;
+    padding:0 8px; font-family:inherit; appearance:none; -webkit-appearance:none;
+  }
+  .f.small input{width:68px; flex:none;}
+  .f input:focus{outline:none; border-color:#ffffff;}
+  .f input[type=color]{
+    flex:0 0 auto; width:52px; height:34px; padding:2px; background:var(--field);
+    border:2px solid var(--border); cursor:pointer;
+  }
+  .chk{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink);}
+  .chk input{
+    appearance:none; -webkit-appearance:none; width:20px; height:20px; margin:0;
+    background:var(--field); border:2px solid var(--border); position:relative;
+  }
+  .chk input:checked{background:var(--green);}
+  .chk input:checked::after{
+    content:""; position:absolute; left:4px; top:0px; width:6px; height:11px;
+    border-right:3px solid #fff; border-bottom:3px solid #fff; transform:rotate(40deg);
+  }
   .loglist{margin:0 14px 4px; background:var(--field); border:2px solid var(--border);
     font-size:12px; line-height:1.8; color:var(--muted); padding:6px 9px;
     overflow-y:auto; white-space:pre-wrap; word-break:break-all;}
@@ -261,22 +288,50 @@
       <button class="tab" data-mode="mosaic">马赛克</button>
       <button class="tab" data-mode="solid">纯色</button>
     </div>
-    <div class="row"><span class="label">模糊强度</span><b id="strengthVal">7.0</b></div>
+    <div class="frow" id="colorRow" style="display:none">
+      <label class="f small"><span class="muted">颜色</span>
+        <input type="color" id="fillColor" value="#12141a"></label>
+      <label class="f"><input type="text" id="fillText" value="#12141a"
+        placeholder="#12141a 或 rgb(18,20,26)" autocomplete="off"></label>
+    </div>
+
+    <div class="row" id="strengthRow"><span class="label">模糊强度</span><b id="strengthVal">7.0</b></div>
     <div class="slider" id="strengthSlider">
       <div class="track"><div class="fill" id="fill" style="width: 15.3846%;"></div><div class="ticks"></div></div>
       <div class="thumb" id="thumb" style="left: 70.3846px;"></div>
     </div>
   </div>
-  <div class="sect" style="text-align:center">
-    <a href="https://github.com/apx201/Screenshots_blur_web" class="muted">GitHub仓库</a>
-   <a href="https://github.com/apx201/Screenshots_blur" class="muted">桌面版</a>
-   <a href="https://space.bilibili.com/1441611827" class="muted">作者哔哩哔哩</a></div>
+
+  <div class="sect">
+    <div class="row"><span class="label">输出文件名</span>
+      <span class="muted" id="namePreview">示例：…</span></div>
+    <div class="frow">
+      <label class="f"><span class="muted">前缀</span>
+        <input type="text" id="prefixInput" placeholder="留空＝原文件名" autocomplete="off"></label>
+      <label class="f"><span class="muted">后缀</span>
+        <input type="text" id="suffixInput" value="_已打码" placeholder="留空＝不加后缀" autocomplete="off"></label>
+    </div>
+    <div class="frow">
+      <label class="chk"><input type="checkbox" id="lossless" checked><span>无损 PNG</span></label>
+      <span class="muted">不压缩、画质无损（文件会更大）</span>
+    </div>
+    <div class="frow">
+      <label class="chk"><input type="checkbox" id="numbering"><span>顺序编号</span></label>
+      <label class="f small"><span class="muted">起始</span>
+        <input type="number" id="startNum" value="1" min="0" max="9999"></label>
+      <label class="chk"><input type="checkbox" id="padZero"><span>补零</span></label>
+    </div>
+  </div>
 
   <div class="sect pc-only">
     <div class="row"><span class="label">日志</span>
       <span class="muted" id="logCount"></span></div>
     <div class="loglist" id="loglist"></div>
   </div>
+
+  <div class="sect" style="text-align:center">
+    <a href="https://github.com/apx201/Screenshots_blur_web" class="muted">GitHub仓库</a>
+  <a href="https://github.com/apx201/Screenshots_blur" class="muted">桌面版</a></div>
 
   <div class="actions">
     <button class="btn primary" id="saveOne" disabled="">下载这张</button>
@@ -309,6 +364,8 @@ const state = {
   sel: 0,
   strength: 7,
   mode: "gaussian",
+  fill: "#12141a",
+  lossless: true,
   busy: false
 };
 
@@ -328,6 +385,10 @@ const els = {
   delRect: document.getElementById("delRect"),
   addRect: document.getElementById("addRect"),
   tabs: document.getElementById("tabs"),
+  colorRow: document.getElementById("colorRow"),
+  strengthRow: document.getElementById("strengthRow"),
+  fillColor: document.getElementById("fillColor"),
+  fillText: document.getElementById("fillText"),
   strengthVal: document.getElementById("strengthVal"),
   slider: document.getElementById("strengthSlider"),
   fill: document.getElementById("fill"),
@@ -338,6 +399,13 @@ const els = {
   busy: document.getElementById("busy"),
   busyBar: document.getElementById("busyBar"),
   out: document.getElementById("out"),
+  prefix: document.getElementById("prefixInput"),
+  suffix: document.getElementById("suffixInput"),
+  numbering: document.getElementById("numbering"),
+  lossless: document.getElementById("lossless"),
+  startNum: document.getElementById("startNum"),
+  padZero: document.getElementById("padZero"),
+  namePreview: document.getElementById("namePreview"),
   loglist: document.getElementById("loglist"),
   logCount: document.getElementById("logCount")
 };
@@ -348,6 +416,46 @@ let dpr = Math.min(2.5, window.devicePixelRatio || 1);
 let preview = document.createElement("canvas");   // 显示尺寸的底图
 let matrix = { s: 1, ox: 0, oy: 0, dw: 0, dh: 0 };
 let drag = null;
+
+/* ---------------- 颜色 ---------------- */
+function parseColor(v) {
+  const t = String(v || "").trim().toLowerCase();
+  let m = /^#([0-9a-f]{3})$/.exec(t);
+  if (m) { const h = m[1]; return "#" + h[0] + h[0] + h[1] + h[1] + h[2] + h[2]; }
+  m = /^#([0-9a-f]{6})$/.exec(t);
+  if (m) return "#" + m[1];
+  m = /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,[^)]*)?\)$/.exec(t);
+  if (m) {
+    return "#" + m.slice(1, 4).map(n => {
+      const v = Math.max(0, Math.min(255, parseInt(n, 10)));
+      return v.toString(16).padStart(2, "0");
+    }).join("");
+  }
+  m = /^(\d{1,3})\s*[, ]\s*(\d{1,3})\s*[, ]\s*(\d{1,3})$/.exec(t);
+  if (m) {
+    return "#" + m.slice(1, 4).map(n => {
+      const v = Math.max(0, Math.min(255, parseInt(n, 10)));
+      return v.toString(16).padStart(2, "0");
+    }).join("");
+  }
+  return null;
+}
+
+function setFill(hex, syncText) {
+  state.fill = hex;
+  els.fillColor.value = hex;
+  if (syncText) els.fillText.value = hex;
+  invalidateExports();
+  render();
+  schedulePrepare();
+}
+
+function syncColorRow() {
+  const solid = state.mode === "solid";
+  els.colorRow.style.display = solid ? "flex" : "none";
+  els.strengthRow.style.display = solid ? "none" : "flex";
+  els.slider.style.display = solid ? "none" : "block";
+}
 
 /* ---------------- 小工具 ---------------- */
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -364,7 +472,8 @@ function current() {
 }
 
 function sig() {
-  return JSON.stringify({ r: state.rects, s: state.strength, m: state.mode });
+  return JSON.stringify({ r: state.rects, s: state.strength, m: state.mode, f: state.fill,
+                          l: state.lossless });
 }
 
 const logLines = [];
@@ -387,11 +496,24 @@ function setBusy(on, ratio = 0) {
 }
 
 /* ---------------- 图片载入 ---------------- */
-function loadImageFile(file) {
+async function loadImageFile(file) {
+  const url = URL.createObjectURL(file);
+  // 优先用 createImageBitmap 并关闭色彩管理，保证导出 PNG 与原图像素完全一致；
+  // 不支持时退回 <img>（会按浏览器色彩管理转换，仍是 PNG 无损压缩）。
+  if (typeof createImageBitmap === "function") {
+    try {
+      const bmp = await createImageBitmap(file, {
+        imageOrientation: "from-image",
+        colorSpaceConversion: "none"
+      });
+      return { img: bmp, url, w: bmp.width, h: bmp.height };
+    } catch (e) {
+      console.warn("createImageBitmap 失败，回退 <img>", e);
+    }
+  }
   return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
     const img = new Image();
-    img.onload = () => resolve({ img, url });
+    img.onload = () => resolve({ img, url, w: img.naturalWidth, h: img.naturalHeight });
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("无法读取：" + file.name)); };
     img.src = url;
   });
@@ -408,10 +530,10 @@ async function addFiles(fileList) {
   for (let i = 0; i < files.length; i++) {
     const f = files[i];
     try {
-      const { img, url } = await loadImageFile(f);
+      const { img, url, w, h } = await loadImageFile(f);
       state.items.push({
         file: f, name: f.name, url,
-        img, w: img.naturalWidth, h: img.naturalHeight,
+        img, w, h,
         exportBlob: null, sig: ""
       });
     } catch (e) {
@@ -421,8 +543,10 @@ async function addFiles(fileList) {
   }
   setBusy(false);
   if (state.index < 0 && state.items.length) state.index = 0;
+  invalidateExports();
   refreshThumbs();
   resize();
+  updateNamePreview();
   log(`添加 ${files.length} 张图片`);
   toast(`已添加 ${files.length} 张`);
 }
@@ -514,7 +638,7 @@ function drawMaskPreview(rect) {
   if (state.mode === "mosaic") {
     pixelate(t, cw, chh, Math.max(2, Math.round(radius)));
   } else if (state.mode === "solid") {
-    t.fillStyle = "#12141a";
+    t.fillStyle = state.fill;
     t.fillRect(0, 0, cw, chh);
   } else {
     blurCanvas(t, cw, chh, radius);
@@ -645,7 +769,7 @@ function applyMaskPx(c, x0, y0, x1, y1, radius) {
   if (state.mode === "mosaic") {
     pixelate(t, cw, chh, Math.max(2, radius));
   } else if (state.mode === "solid") {
-    t.fillStyle = "#12141a";
+    t.fillStyle = state.fill;
     t.fillRect(0, 0, cw, chh);
   } else {
     blurCanvas(t, cw, chh, radius);
@@ -754,6 +878,35 @@ function renderFull(item) {
   return c;
 }
 
+/* 输出文件名：前缀（留空=原文件名）+ 编号 / 后缀 */
+function buildName(item, idx) {
+  const ext = state.lossless ? "png" : exportExt(item.name);
+  const stem = (item.name || "image").replace(/\.[^.]+$/, "");
+  const base = (els.prefix.value || "").trim() || stem;
+  if (els.numbering.checked) {
+    const start = Math.max(0, parseInt(els.startNum.value, 10) || 0);
+    const total = Math.max(1, state.items.length);
+    const width = els.padZero.checked
+      ? Math.max(2, String(start + total - 1).length) : 0;
+    const n = start + Math.max(0, idx);
+    return `${base} ${width ? String(n).padStart(width, "0") : n}.${ext}`;
+  }
+  return `${base}${els.suffix.value || ""}.${ext}`;
+}
+
+function updateNamePreview() {
+  const it = current();
+  if (!it) { els.namePreview.textContent = "示例：我的世界 1.jpg"; return; }
+  const many = state.items.length > 1 && (els.prefix.value || "").trim() &&
+    !els.numbering.checked;
+  els.namePreview.textContent =
+    `示例：${buildName(it, state.index)}${many ? "（多张会重名）" : ""}`;
+}
+
+function invalidateExports() {
+  state.items.forEach(it => { it.exportBlob = null; it.sig = ""; });
+}
+
 function exportExt(name) {
   const m = /\.(jpe?g|png|webp)$/i.exec(name || "");
   if (!m) return "jpg";
@@ -767,12 +920,11 @@ function canvasToBlob(c, type) {
 
 async function makeFile(item) {
   const c = renderFull(item);
-  let ext = exportExt(item.name);
+  let ext = state.lossless ? "png" : exportExt(item.name);
   let type = { jpg: "image/jpeg", png: "image/png", webp: "image/webp" }[ext] || "image/jpeg";
   let blob = await canvasToBlob(c, type);
   if (!blob) { type = "image/jpeg"; ext = "jpg"; blob = await canvasToBlob(c, type); }
-  const base = (item.name || "image").replace(/\.[^.]+$/, "");
-  const name = `${base}_已打码.${ext}`;
+  const name = buildName(item, state.items.indexOf(item));
   return new File([blob], name, { type });
 }
 
@@ -802,42 +954,22 @@ function download(file) {
   setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 8000);
 }
 
-/* 只有手机/平板才用系统分享面板；Windows / macOS 浏览器一律直接下载 */
-const IS_MOBILE = /Android|iPhone|iPad|iPod|HarmonyOS|Windows Phone/i.test(navigator.userAgent) ||
-  (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
-
-async function shareFiles(files, title) {
-  if (!IS_MOBILE) return false;
-  if (navigator.canShare && navigator.canShare({ files })) {
-    try {
-      await navigator.share({ files, title });
-      return true;
-    } catch (e) {
-      if (e && e.name === "AbortError") return true;
-      console.warn(e);
-    }
-  }
-  return false;
-}
-
 /* ---------------- 导出动作 ---------------- */
 async function saveOne() {
   const item = current();
   if (!item) { toast("先选择图片"); return; }
   if (item.exportBlob && item.sig === sig()) {
-    const ok = await shareFiles([item.exportBlob], "打码结果");
-    if (!ok) download(item.exportBlob);
-    toast(ok ? "已打开分享面板" : `已下载 ${item.exportBlob.name}`);
-    log(ok ? `分享 ${item.exportBlob.name}` : `下载 ${item.exportBlob.name}`);
+    download(item.exportBlob);
+    toast(`已下载 ${item.exportBlob.name}`);
+    log(`下载 ${item.exportBlob.name}`);
     return;
   }
   setBusy(true);
   try {
     const file = await makeFile(item);
-    log(`导出 ${file.name}`);
-    const ok = await shareFiles([file], "打码结果");
-    if (!ok) download(file);
-    toast(ok ? "已打开分享面板" : `已下载 ${file.name}`);
+    download(file);
+    toast(`已下载 ${file.name}`);
+    log(`下载 ${file.name}`);
   } catch (e) {
     toast("导出失败：" + e.message);
     log("导出失败：" + e.message);
@@ -864,15 +996,11 @@ async function saveAll() {
     }
     setBusy(false);
 
-    if (IS_MOBILE) {
-      if (files.length === 1) {
-        const ok = await shareFiles(files, "打码结果");
-        if (!ok) download(files[0]);
-        toast(ok ? "已打开分享面板" : `已下载 ${files[0].name}`);
-        return;
-      }
-      const ok = await shareFiles(files, "打码结果");
-      if (ok) { toast("已打开分享面板"); return; }
+    if (files.length === 1) {
+      download(files[0]);
+      log(`下载 ${files[0].name}`);
+      toast(`已下载 ${files[0].name}`);
+      return;
     }
     log(`打包导出 ${files.length} 张`);
     const zip = await makeZip(files.map(f => ({ name: f.name, blob: f })));
@@ -1080,6 +1208,7 @@ function refreshThumbs() {
       refreshThumbs();
       resize();
       updateRectInfo();
+      updateNamePreview();
       schedulePrepare();
     });
     const x = document.createElement("span");
@@ -1107,9 +1236,11 @@ function removeItem(i) {
   if (it) URL.revokeObjectURL(it.url);
   state.items.splice(i, 1);
   if (state.index >= state.items.length) state.index = state.items.length - 1;
+  invalidateExports();
   refreshThumbs();
   resize();
   updateRectInfo();
+  updateNamePreview();
   log(`移除 ${it ? it.name : "图片"}`);
 }
 
@@ -1154,6 +1285,7 @@ els.tabs.addEventListener("click", e => {
   if (!b) return;
   state.mode = b.dataset.mode;
   [...els.tabs.children].forEach(t => t.classList.toggle("on", t === b));
+  syncColorRow();
   render();
   els.badge.textContent = `${current() ? current().w + "×" + current().h : ""}  ·  ${modeName(state.mode)}`;
   schedulePrepare();
@@ -1189,12 +1321,36 @@ els.slider.addEventListener("pointerup", () => {
   schedulePrepare();
 });
 
+els.lossless.addEventListener("change", () => {
+  state.lossless = els.lossless.checked;
+  invalidateExports();
+  updateNamePreview();
+  schedulePrepare();
+});
+
+els.fillColor.addEventListener("input", () => {
+  setFill(els.fillColor.value, true);
+});
+els.fillText.addEventListener("input", () => {
+  const hex = parseColor(els.fillText.value);
+  if (hex) setFill(hex, false);
+});
+els.fillText.addEventListener("change", () => {
+  const hex = parseColor(els.fillText.value);
+  if (hex) setFill(hex, true);
+  else els.fillText.value = state.fill;
+});
+
+[els.prefix, els.suffix, els.numbering, els.startNum, els.padZero].forEach(el => {
+  el.addEventListener("input", updateNamePreview);
+  el.addEventListener("change", () => { invalidateExports(); updateNamePreview(); schedulePrepare(); });
+});
+updateNamePreview();
+syncColorRow();
+
 els.saveOne.addEventListener("click", saveOne);
 els.saveAll.addEventListener("click", saveAll);
-if (!IS_MOBILE) {
-  els.saveOne.textContent = "下载这张";
-  els.saveAll.textContent = "下载全部";
-}
+
 window.addEventListener("resize", () => { dpr = Math.min(2.5, window.devicePixelRatio || 1); resize(); });
 window.addEventListener("orientationchange", () => setTimeout(resize, 260));
 
