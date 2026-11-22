@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#313233">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>截图打码</title>
+<title>Wiki人的图片小工具</title>
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACGElEQVR4nO3cMUoDYRhF0T8iWMR+1pGkDi7CdboISe8+0mth5wZyBUeEmfGcMiHDFJdXfWR3OJ4G3HJ381MQB9+xHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBuh+LsX9+n/3bj5fHMcbn8Tr7CQ9v00LeYTksB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQdofjqb/lX7McrOH6fBu34/tfv8NyWA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiILk+J1kO1nB9vo3b8Wma///l1+v89/8LloMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SK7PSZaDNVyfb+N2/Hx+mv2Ey+V1LInlIImDJA6SOEjiIImDJA6SOBAHP2c5SOIgiYMkDpI4SOIgiYMkDpI4SOIguT4nWQ6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiYJQvDBg0Wm28/OgAAAAASUVORK5CYII=">
 <style>
   :root{
@@ -168,23 +168,42 @@
     font-size:12px; line-height:1.8; color:var(--muted); padding:6px 9px;
     overflow-y:auto; white-space:pre-wrap; word-break:break-all;}
 
+  /* ---------- 顶部模式标签 ---------- */
+  .modebar{background:var(--panel-dark); border-bottom:2px solid var(--border);
+    padding:6px 14px; display:flex; justify-content:center;}
+  .modetabs{display:flex; gap:6px; width:min(300px, 100%);}
+  .modetab{flex:1 1 0; height:36px; border:2px solid var(--border);
+    background:var(--gray); color:var(--dark-text); font-size:14px; font-weight:700;
+    padding:0; position:relative;}
+  .modetab.on{background:var(--green); color:#fff;}
+  .modetab.on::after{content:""; position:absolute; left:10px; right:10px; bottom:2px;
+    height:4px; background:#fff;}
+  .ratios{flex-wrap:wrap;}
+  .ratios .rtab{flex:1 1 62px; min-width:62px; height:36px; font-size:13px;
+    font-weight:700; border:2px solid var(--border); background:var(--gray);
+    color:var(--dark-text); padding:0; position:relative;}
+  .ratios .rtab.on{background:var(--green); color:#fff;}
+  .ratios .rtab.on::after{content:""; position:absolute; left:8px; right:8px;
+    bottom:2px; height:4px; background:#fff;}
+
   /* ---------- PC / 平板：宽屏双栏 ---------- */
   @media (min-width: 900px) {
     body {
       display: grid;
       grid-template-columns: minmax(0, 1fr) clamp(360px, 34vw, 440px);
-      grid-template-rows: auto minmax(0, 1fr);
+      grid-template-rows: auto auto minmax(0, 1fr);
       height: 100vh;
       height: 100dvh;
     }
-    .bar { grid-column: 1 / -1; }
+    .bar { grid-column: 1 / -1; grid-row: 1; }
+    .modebar { grid-column: 1 / -1; grid-row: 2; }
     .stage {
-      grid-column: 1; grid-row: 2;
+      grid-column: 1; grid-row: 3;
       border-bottom: none;
       border-right: 2px solid var(--card-border);
     }
     .panel {
-      grid-column: 2; grid-row: 2;
+      grid-column: 2; grid-row: 3;
       max-height: none; min-height: 0; overflow-y: auto;
       border-top: none;
       display: flex; flex-direction: column;
@@ -213,14 +232,16 @@
     body {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 360px;
-      grid-template-rows: auto minmax(0, 1fr);
+      grid-template-rows: auto auto minmax(0, 1fr);
       height: 100dvh;
     }
-    .bar { grid-column: 1 / -1; height: 44px; padding-top: 0; }
+    .bar { grid-column: 1 / -1; grid-row: 1; height: 44px; padding-top: 0; }
+    .modebar { grid-column: 1 / -1; grid-row: 2; padding: 4px 14px; }
+    .modetab { height: 30px; font-size: 13px; }
     .bar h1 { font-size: 15px; }
-    .stage { grid-column: 1; grid-row: 2; border-bottom: none;
+    .stage { grid-column: 1; grid-row: 3; border-bottom: none;
       border-right: 2px solid var(--card-border); }
-    .panel { grid-column: 2; grid-row: 2; max-height: none; min-height: 0;
+    .panel { grid-column: 2; grid-row: 3; max-height: none; min-height: 0;
       overflow-y: auto; border-top: none; display: flex; flex-direction: column; }
     .panel > .sect, .panel > .thumbs, .panel > .row { flex: 0 0 auto; }
     .panel .actions { margin-top: auto; position: sticky; bottom: 0;
@@ -249,9 +270,16 @@
     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
   </div>
-  <h1>截图打码</h1>
+  <h1>Wiki人的图片小工具</h1>
   <span class="count" id="count">共 0 张</span>
 </header>
+
+<div class="modebar">
+  <div class="modetabs">
+    <button class="modetab on" data-tab="blur">打码</button>
+    <button class="modetab" data-tab="crop">裁剪</button>
+  </div>
+</div>
 
 <main class="stage" id="stage">
   <canvas id="view" width="1160" height="1208" style="width: 928px; height: 966px;"></canvas>
@@ -269,7 +297,7 @@
     <span class="muted">点击切换 · 右上角 × 移除</span></div>
   <div class="thumbs" id="thumbs"><button class="thumb-add">+</button></div>
 
-  <div class="sect">
+  <div class="sect only-blur">
     <div class="row"><span class="label">打码区域</span>
       <span class="muted" id="rectInfo">1 个区域 · 四角缩放</span></div>
     <div class="zoomwrap">
@@ -283,7 +311,7 @@
     </div>
   </div>
 
-  <div class="sect">
+  <div class="sect only-blur">
     <div class="row pc-only"><span class="label">打码效果</span>
       <span class="muted">强度按图片宽度换算</span></div>
     <div class="tabs" id="tabs">
@@ -302,6 +330,30 @@
     <div class="slider" id="strengthSlider">
       <div class="track"><div class="fill" id="fill" style="width: 15.3846%;"></div><div class="ticks"></div></div>
       <div class="thumb" id="thumb" style="left: 70.3846px;"></div>
+    </div>
+  </div>
+
+  <div class="sect only-crop" style="display:none">
+    <div class="row"><span class="label">裁剪设置</span>
+      <span class="muted" id="cropInfo">居中裁剪</span></div>
+    <div class="tabs ratios" id="ratioTabs">
+      <button class="rtab on" data-ratio="16:9">16:9</button>
+      <button class="rtab" data-ratio="4:3">4:3</button>
+      <button class="rtab" data-ratio="1:1">1:1</button>
+      <button class="rtab" data-ratio="9:16">9:16</button>
+      <button class="rtab" data-ratio="3:4">3:4</button>
+      <button class="rtab" data-ratio="custom">自定义</button>
+    </div>
+    <div class="frow" id="customSize" style="display:none">
+      <label class="f small"><span class="muted">宽</span>
+        <input type="number" id="cropW" value="1920" min="1" max="20000"></label>
+      <label class="f small"><span class="muted">高</span>
+        <input type="number" id="cropH" value="1080" min="1" max="20000"></label>
+      <span class="muted">px · 居中裁剪</span>
+    </div>
+    <div class="muted" style="padding:0 14px 2px">
+      比例模式按每张图的最大内接区域裁剪；要所有图输出同一尺寸，用「自定义」填宽高（原图不够大时会放大）。
+      预览里可拖动裁剪框调整位置（所有图片共用）。
     </div>
   </div>
 
@@ -371,7 +423,14 @@ const state = {
   mode: "gaussian",
   fill: "#12141a",
   lossless: true,
-  busy: false
+  busy: false,
+  tab: "blur",                 // blur | crop
+  cropMode: "ratio",           // ratio | custom
+  cropRatio: "16:9",
+  cropScale: 1,
+  cropW: 1920,
+  cropH: 1080,
+  cropOffset: { x: 0.5, y: 0.5 }
 };
 
 const els = {
@@ -411,6 +470,12 @@ const els = {
   startNum: document.getElementById("startNum"),
   padZero: document.getElementById("padZero"),
   namePreview: document.getElementById("namePreview"),
+  modebar: document.querySelector(".modetabs"),
+  cropInfo: document.getElementById("cropInfo"),
+  ratioTabs: document.getElementById("ratioTabs"),
+  customSize: document.getElementById("customSize"),
+  cropW: document.getElementById("cropW"),
+  cropH: document.getElementById("cropH"),
   loglist: document.getElementById("loglist"),
   logCount: document.getElementById("logCount")
 };
@@ -477,8 +542,13 @@ function current() {
 }
 
 function sig() {
-  return JSON.stringify({ r: state.rects, s: state.strength, m: state.mode, f: state.fill,
-                          l: state.lossless });
+  return JSON.stringify({
+    t: state.tab, r: state.rects, s: state.strength, m: state.mode, f: state.fill,
+    l: state.lossless, cm: state.cropMode, cr: state.cropRatio,
+    cw: state.cropW, ch: state.cropH, cs: state.cropScale,
+    cx: state.cropOffset.x, cy: state.cropOffset.y,
+    sfx: els.suffix.value
+  });
 }
 
 const logLines = [];
@@ -578,6 +648,207 @@ function buildPreview(item, dw, dh) {
 }
 
 /* ---------------- 预览绘制 ---------------- */
+/* ---------------- 裁剪 ---------------- */
+const CROP_RATIOS = { "16:9": 16 / 9, "4:3": 4 / 3, "1:1": 1, "9:16": 9 / 16, "3:4": 3 / 4 };
+
+function cropMax(item) {
+  const w = item.w, h = item.h;
+  if (state.cropMode === "custom") return { w, h };
+  const r = CROP_RATIOS[state.cropRatio] || 16 / 9;
+  let cw = w, ch = Math.round(w / r);
+  if (ch > h) { ch = h; cw = Math.round(h * r); }
+  return { w: Math.max(1, Math.min(cw, w)), h: Math.max(1, Math.min(ch, h)) };
+}
+
+function cropRectFor(item) {
+  const w = item.w, h = item.h;
+  let cw, ch;
+  if (state.cropMode === "custom") {
+    cw = Math.max(1, Math.min(Math.round(state.cropW), w));
+    ch = Math.max(1, Math.min(Math.round(state.cropH), h));
+  } else {
+    const m = cropMax(item);
+    const s = Math.min(1, Math.max(0.1, state.cropScale || 1));
+    cw = Math.max(8, Math.round(m.w * s));
+    ch = Math.max(8, Math.round(m.h * s));
+  }
+  let x = Math.round(state.cropOffset.x * w - cw / 2);
+  let y = Math.round(state.cropOffset.y * h - ch / 2);
+  x = Math.max(0, Math.min(w - cw, x));
+  y = Math.max(0, Math.min(h - ch, y));
+  return { x, y, w: cw, h: ch };
+}
+
+function cropOutSize(item) {
+  if (state.cropMode === "custom") {
+    return { w: Math.max(1, Math.round(state.cropW)), h: Math.max(1, Math.round(state.cropH)) };
+  }
+  const r = cropRectFor(item);
+  return { w: r.w, h: r.h };
+}
+
+function renderCropCanvas(item) {
+  const r = cropRectFor(item);
+  const out = cropOutSize(item);
+  const c = document.createElement("canvas");
+  c.width = out.w;
+  c.height = out.h;
+  const cctx = c.getContext("2d");
+  cctx.imageSmoothingEnabled = true;
+  cctx.imageSmoothingQuality = "high";
+  cctx.drawImage(item.img, r.x, r.y, r.w, r.h, 0, 0, out.w, out.h);
+  return c;
+}
+
+function cropHandles(r, item) {
+  const { ox, oy, dw, dh } = matrix;
+  const x = ox + (r.x / item.w) * dw;
+  const y = oy + (r.y / item.h) * dh;
+  const w = (r.w / item.w) * dw;
+  const h = (r.h / item.h) * dh;
+  return {
+    x, y, w, h,
+    nw: [x, y], n: [x + w / 2, y], ne: [x + w, y],
+    w: [x, y + h / 2], e: [x + w, y + h / 2],
+    sw: [x, y + h], s: [x + w / 2, y + h], se: [x + w, y + h]
+  };
+}
+
+function cropHitTest(px, py) {
+  const item = current();
+  if (!item) return null;
+  const hs = cropHandles(cropRectFor(item), item);
+  for (const k of ["nw", "n", "ne", "w", "e", "sw", "s", "se"]) {
+    const [hx, hy] = hs[k];
+    if (Math.abs(px - hx) <= 12 && Math.abs(py - hy) <= 12) return k;
+  }
+  if (px >= hs.x && px <= hs.x + hs.w && py >= hs.y && py <= hs.y + hs.h) return "inside";
+  return null;
+}
+
+function clampNum(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+function resizeCropRect(item, handle, start, dx, dy) {
+  const W = item.w, H = item.h;
+  const ratioMode = state.cropMode !== "custom";
+  const r = CROP_RATIOS[state.cropRatio] || 16 / 9;
+  const minSize = 24;
+
+  if (!ratioMode) {
+    let { x, y, w, h } = start;
+    if (handle.includes("w")) {
+      const nx = clampNum(x + dx, 0, x + w - minSize);
+      w = x + w - nx; x = nx;
+    }
+    if (handle.includes("e")) w = clampNum(w + dx, minSize, W - x);
+    if (handle.includes("n")) {
+      const ny = clampNum(y + dy, 0, y + h - minSize);
+      h = y + h - ny; y = ny;
+    }
+    if (handle.includes("s")) h = clampNum(h + dy, minSize, H - y);
+    return { x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(h) };
+  }
+
+  // 比例锁定：拖哪条边就锚住对面
+  const anchorRight = handle.includes("w");
+  const anchorBottom = handle.includes("n");
+  const bx = anchorRight ? start.x + start.w : start.x;
+  const by = anchorBottom ? start.y + start.h : start.y;
+
+  let w = start.w + (handle.includes("e") ? dx : handle.includes("w") ? -dx : 0);
+  let h = start.h + (handle.includes("s") ? dy : handle.includes("n") ? -dy : 0);
+  if (!handle.includes("e") && !handle.includes("w")) w = h * r;        // 只拖上下
+  if (!handle.includes("n") && !handle.includes("s")) h = w / r;        // 只拖左右
+  if (handle.length === 2) {                                            // 角落：跟随更大的方向
+    w = Math.max(w, h * r);
+    h = w / r;
+  }
+  const maxW = anchorRight ? bx : W - bx;
+  const maxH = anchorBottom ? by : H - by;
+  const limit = Math.min(maxW, maxH * r);
+  w = clampNum(w, Math.min(minSize, limit), limit);
+  h = w / r;
+  const x = anchorRight ? bx - w : bx;
+  const y = anchorBottom ? by - h : by;
+  return { x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(h) };
+}
+
+function applyCropRect(item, nr) {
+  if (state.cropMode === "custom") {
+    state.cropW = Math.max(8, Math.round(nr.w));
+    state.cropH = Math.max(8, Math.round(nr.h));
+    els.cropW.value = state.cropW;
+    els.cropH.value = state.cropH;
+  } else {
+    const m = cropMax(item);
+    state.cropScale = Math.min(1, Math.max(0.1, nr.w / m.w));
+  }
+  state.cropOffset.x = Math.min(1, Math.max(0, (nr.x + nr.w / 2) / item.w));
+  state.cropOffset.y = Math.min(1, Math.max(0, (nr.y + nr.h / 2) / item.h));
+}
+
+function drawCropOverlay() {
+  const item = current();
+  if (!item) return;
+  const { ox, oy, dw, dh } = matrix;
+  const r = cropRectFor(item);
+  const x = ox + (r.x / item.w) * dw;
+  const y = oy + (r.y / item.h) * dh;
+  const w = (r.w / item.w) * dw;
+  const h = (r.h / item.h) * dh;
+  ctx.save();
+  ctx.fillStyle = "rgba(0,0,0,.55)";
+  ctx.fillRect(ox, oy, dw, Math.max(0, y - oy));
+  ctx.fillRect(ox, y + h, dw, Math.max(0, oy + dh - (y + h)));
+  ctx.fillRect(ox, y, Math.max(0, x - ox), h);
+  ctx.fillRect(x + w, y, Math.max(0, ox + dw - (x + w)), h);
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x + 1, y + 1, Math.max(1, w - 2), Math.max(1, h - 2));
+  ctx.strokeStyle = "rgba(255,255,255,.32)";
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 3; i++) {
+    ctx.beginPath(); ctx.moveTo(x + (w * i) / 3, y); ctx.lineTo(x + (w * i) / 3, y + h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, y + (h * i) / 3); ctx.lineTo(x + w, y + (h * i) / 3); ctx.stroke();
+  }
+  // 8 个缩放手柄
+  const hs = cropHandles(r, item);
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = "#1e1f20";
+  ctx.lineWidth = 1;
+  for (const k of ["nw", "n", "ne", "w", "e", "sw", "s", "se"]) {
+    const [hx, hy] = hs[k];
+    ctx.fillRect(hx - 4, hy - 4, 8, 8);
+    ctx.strokeRect(hx - 4, hy - 4, 8, 8);
+  }
+  ctx.restore();
+}
+
+function updateCropInfo() {
+  if (!els.cropInfo) return;
+  const item = current();
+  if (!item) { els.cropInfo.textContent = "居中裁剪"; return; }
+  const out = cropOutSize(item);
+  const ratio = state.cropMode === "custom" ? "自定义" : state.cropRatio;
+  els.cropInfo.textContent = `${ratio} · 输出 ${out.w}×${out.h}`;
+}
+
+function setTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll(".modetab").forEach(b =>
+    b.classList.toggle("on", b.dataset.tab === tab));
+  document.querySelectorAll(".only-blur").forEach(el =>
+    el.style.display = tab === "blur" ? "" : "none");
+  document.querySelectorAll(".only-crop").forEach(el =>
+    el.style.display = tab === "crop" ? "" : "none");
+  if (!suffixCustom) els.suffix.value = tab === "crop" ? "_裁剪" : "_已打码";
+  updateNamePreview();
+  updateCropInfo();
+  invalidateExports();
+  render();
+  schedulePrepare();
+}
+
 function render() {
   const item = current();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -602,6 +873,15 @@ function render() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.imageSmoothingQuality = "high";
   ctx.drawImage(preview, matrix.ox, matrix.oy, dw, dh);
+
+  if (state.tab === "crop") {
+    drawCropOverlay();
+    els.badge.style.display = "block";
+    const out = cropOutSize(item);
+    els.badge.textContent = `${item.w}×${item.h} → ${out.w}×${out.h}`;
+    updateCropInfo();
+    return;
+  }
 
   for (const r of state.rects) drawMaskPreview(r);
   drawRects();
@@ -924,7 +1204,7 @@ function canvasToBlob(c, type) {
 }
 
 async function makeFile(item) {
-  const c = renderFull(item);
+  const c = state.tab === "crop" ? renderCropCanvas(item) : renderFull(item);
   let ext = state.lossless ? "png" : exportExt(item.name);
   let type = { jpg: "image/jpeg", png: "image/png", webp: "image/webp" }[ext] || "image/jpeg";
   let blob = await canvasToBlob(c, type);
@@ -1128,9 +1408,24 @@ function hitTest(px, py) {
   return { kind: "new" };
 }
 
+let cropDrag = null;
+
 view.addEventListener("pointerdown", e => {
   if (!current()) return;
   try { view.setPointerCapture(e.pointerId); } catch (err) {}
+  if (state.tab === "crop") {
+    const item = current();
+    const hit = cropHitTest(e.offsetX, e.offsetY);
+    if (!hit) { cropDrag = null; return; }
+    cropDrag = {
+      mode: hit === "inside" ? "move" : "resize",
+      handle: hit,
+      px: e.offsetX, py: e.offsetY,
+      offset: { x: state.cropOffset.x, y: state.cropOffset.y },
+      rect: cropRectFor(item)
+    };
+    return;
+  }
   const px = e.offsetX, py = e.offsetY;
   const hit = hitTest(px, py);
   if (hit.kind === "resize") {
@@ -1151,6 +1446,25 @@ view.addEventListener("pointerdown", e => {
 });
 
 view.addEventListener("pointermove", e => {
+  if (state.tab === "crop" && cropDrag) {
+    const item = current();
+    if (!item) return;
+    if (cropDrag.mode === "resize") {
+      const dx = ((e.offsetX - cropDrag.px) / Math.max(1, matrix.dw)) * item.w;
+      const dy = ((e.offsetY - cropDrag.py) / Math.max(1, matrix.dh)) * item.h;
+      applyCropRect(item, resizeCropRect(item, cropDrag.handle, cropDrag.rect, dx, dy));
+    } else {
+      const dx = (e.offsetX - cropDrag.px) / Math.max(1, matrix.dw);
+      const dy = (e.offsetY - cropDrag.py) / Math.max(1, matrix.dh);
+      const rx = cropDrag.rect.w / item.w / 2;
+      const ry = cropDrag.rect.h / item.h / 2;
+      state.cropOffset.x = Math.min(1 - rx, Math.max(rx, cropDrag.offset.x + dx));
+      state.cropOffset.y = Math.min(1 - ry, Math.max(ry, cropDrag.offset.y + dy));
+    }
+    updateCropInfo();
+    render();
+    return;
+  }
   if (!drag) return;
   const px = e.offsetX, py = e.offsetY;
   const rel = toRel(px, py);
@@ -1177,6 +1491,12 @@ view.addEventListener("pointermove", e => {
 });
 
 function endDrag() {
+  if (cropDrag) {
+    cropDrag = null;
+    invalidateExports();
+    schedulePrepare();
+    return;
+  }
   if (!drag) return;
   const r = state.rects[state.sel];
   if (drag.kind === "new" && (!r || r[2] - r[0] < 0.006 || r[3] - r[1] < 0.006)) {
@@ -1346,6 +1666,47 @@ els.fillText.addEventListener("change", () => {
   else els.fillText.value = state.fill;
 });
 
+let suffixCustom = false;
+els.suffix.addEventListener("input", () => { suffixCustom = true; });
+
+document.querySelectorAll(".modetab").forEach(b => {
+  b.addEventListener("click", () => setTab(b.dataset.tab));
+});
+
+els.ratioTabs.addEventListener("click", e => {
+  const b = e.target.closest(".rtab");
+  if (!b) return;
+  [...els.ratioTabs.children].forEach(t => t.classList.toggle("on", t === b));
+  const v = b.dataset.ratio;
+  if (v === "custom") {
+    state.cropMode = "custom";
+    els.customSize.style.display = "flex";
+  } else {
+    state.cropMode = "ratio";
+    state.cropRatio = v;
+    els.customSize.style.display = "none";
+  }
+  updateCropInfo();
+  invalidateExports();
+  render();
+  schedulePrepare();
+});
+
+function readCropSize() {
+  const w = parseInt(els.cropW.value, 10);
+  const h = parseInt(els.cropH.value, 10);
+  state.cropW = Math.max(1, Math.min(20000, isNaN(w) ? 1920 : w));
+  state.cropH = Math.max(1, Math.min(20000, isNaN(h) ? 1080 : h));
+}
+[els.cropW, els.cropH].forEach(el => {
+  el.addEventListener("input", () => {
+    readCropSize(); updateCropInfo(); render();
+  });
+  el.addEventListener("change", () => {
+    readCropSize(); invalidateExports(); updateCropInfo(); render(); schedulePrepare();
+  });
+});
+
 [els.prefix, els.suffix, els.numbering, els.startNum, els.padZero].forEach(el => {
   el.addEventListener("input", updateNamePreview);
   el.addEventListener("change", () => { invalidateExports(); updateNamePreview(); schedulePrepare(); });
@@ -1361,6 +1722,7 @@ window.addEventListener("orientationchange", () => setTimeout(resize, 260));
 
 /* ---------------- 初始化 ---------------- */
 setSlider(state.strength);
+setTab("blur");
 updateRectInfo();
 refreshThumbs();
 resize();
